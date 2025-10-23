@@ -49,11 +49,17 @@ class ListaDobleEnlazada:
         print("="*70)
         
         actual = self.cabeza
-        contador = 1
+        contador = 0
+        total_a =0
+        total_i =0
         
         while actual is not None:
             print(f"{contador}. {actual.cliente}")
-            actual = actual.siguiente
+            if actual.cliente.activo:
+                total_a +=1
+            else: 
+                total_i+= 1
+            actual = actual.siguiente 
             contador += 1
         
         print("="*70)
@@ -100,3 +106,70 @@ class ListaDobleEnlazada:
                 print("\nOpción inválida.")
         except ValueError:
             print("\nPor favor ingrese un número válido.")
+class SistemaGestionClientes:
+    
+    def __init__(self):
+        self.lista_clientes = ListaDobleEnlazada()
+    
+    def mostrar_menu(self):
+        """Muestra el menú principal"""
+        print("\n" + "="*70)
+        print("SISTEMA DE GESTIÓN DE CLIENTES".center(70))
+        print("="*70)
+        print("1. Registrar un cliente")
+        print("2. Listar clientes")
+        print("3. Eliminar un cliente (lógico)")
+        print("4. Salir")
+        print("="*70)
+    
+    def registrar_cliente(self):
+        
+        print("\n--- REGISTRO DE NUEVO CLIENTE ---")
+        
+        nombre = input("Ingrese el nombre: ").strip()
+        if not nombre:
+            print("\n El nombre no puede estar vacío.")
+            return
+        
+        apellido = input("Ingrese el apellido: ").strip()
+        if not apellido:
+            print("\n El apellido no puede estar vacío.")
+            return
+        
+        telefono = input("Ingrese el número de teléfono: ").strip()
+        if not telefono:
+            print("\n El teléfono no puede estar vacío.")
+            return
+        
+        cliente = Cliente(nombre, apellido, telefono)
+        self.lista_clientes.agregar_cliente(cliente)
+    
+    def ejecutar(self):
+        
+        while True:
+            self.mostrar_menu()
+            
+            try:
+                opcion = input("\nSeleccione una opción: ").strip()
+                
+                if opcion == "1":
+                    self.registrar_cliente()
+                elif opcion == "2":
+                    self.lista_clientes.listar_clientes()
+                elif opcion == "3":
+                    self.lista_clientes.eliminar_cliente_logico()
+                elif opcion == "4":
+                    print("\n Hasta pronto.")
+                    break
+                else:
+                    print("\n Opción no válida. Por favor seleccione una opción del 1 al 4.")
+            
+            except KeyboardInterrupt:
+                print("\n\n Programa interrumpido por el usuario.")
+                break
+            
+
+
+if __name__ == "__main__":
+    sistema = SistemaGestionClientes()
+    sistema.ejecutar()
